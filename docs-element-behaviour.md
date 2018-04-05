@@ -15,7 +15,7 @@ Some documentation on the elements on the page and what they should do.
 
 ## Buttons
 
-##### ``#decrypt``
+###### ``#decrypt``
 
 The "Decrypt" button attached to ``#decrypt-pw``
 - attempts to decrypt the emojicrypt in ``#decrypt-in`` to ``#decrypt-out`` using ``#decrypt-pw``
@@ -25,7 +25,7 @@ The "Decrypt" button attached to ``#decrypt-pw``
 - a successful decrypt sets the ``location.hash`` to ``show`` to unhide ``#decrypt-out``
 
 
-#### ``#encrypt``
+##### ``#encrypt``
 
 The "Encrypt" button attached to ``#encrypt-pw``
 - will encrypt the message in ``#encrypt-in`` to ``#encrypt-out`` using ``#encrypt-pw`` and ``#cost``
@@ -36,13 +36,13 @@ The "Encrypt" button attached to ``#encrypt-pw``
 - a successful encrypt also removes the ``disabled`` property from ``#copy``
 
 
-#### ``#copy``
+##### ``#copy``
 
 The "Copy" button attached to ``#encrypt-out``
 - copies the value of ``#encrypt-out`` to the clipboard (when not disabled)
 
 
-#### ``#cost``
+##### ``#cost``
 
 The cost radio buttons located beneath ``#encrypt-pw``
 - selecting a different one is the same as clicking ``#encrypt``
