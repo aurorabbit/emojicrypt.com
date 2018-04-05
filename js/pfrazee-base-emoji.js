@@ -1,9 +1,11 @@
 
 function toBuffer(v) {
+  if (v instanceof ArrayBuffer)
+    return new Uint8Array(v)
   if (!ArrayBuffer.isView(v))
     throw new Error('Invalid ArrayBuffer');
   if (!v instanceof Uint8Array)
-    return Uint8Array(v);
+    throw new Error('Buffer must be Uint8Array'); //?
   return v
 }
 
