@@ -80,14 +80,9 @@ function decodeParams(emojicrypt) {
     
     try {
         params = protocol[version].decodeHeader(header);
-    } catch(e) {
-        return error(e.message);
-    }
+    } catch(e) { throw e; } // rethrow
     
-    return params; // demo for now
-    
-    // TODO
-    
+    return params;
 }
 
 
