@@ -1,6 +1,17 @@
 var protocol = {
     1: {
         // v1 protocol
+        
+        // 1 byte       header & scrypt params (encodeHeader, decodeHeader)
+        // 4 bytes      MAC
+        // 4 or 6 bytes salt
+        // remaining    ciphertext
+        
+        // constants
+        p: 1,
+        dkLen: 32, // 256 div 8 = 32
+        macLen: 4, // 4 emoji, 32 bits
+        
         // 1 header emoji
         // 4 or 6 salt emojis
         // uses emoji256 set, from github.com/pfrazee/base-emoji
@@ -54,9 +65,6 @@ var protocol = {
             // pack the values into a number
             return version << 5 | N << 2 | r << 1 | s;
         },
-        // v1 constants
-        p: 1,
-        dkLen: 32, // 256 div 8 = 32
     },
 };
 
