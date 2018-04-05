@@ -8,11 +8,11 @@ Made for twitter and the fediverse.
 
 ## Thanks to
 
-[ricmoo/scrypt.js](https://github.com/ricmoo/scrypt-js) [demo](http://ricmoo.github.io/scrypt-js/)
+[``ricmoo/scrypt.js``](https://github.com/ricmoo/scrypt-js) [demo](http://ricmoo.github.io/scrypt-js/)
 
-[pfrazee/base-emoji](https://github.com/pfrazee/base-emoji) base256 with Emoji
+[``pfrazee/base-emoji``](https://github.com/pfrazee/base-emoji) base256 with Emoji
 
-WebCrypto
+[WebCrypto](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)
 
 
 ## Project state
