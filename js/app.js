@@ -140,15 +140,13 @@ function decrypt(emojicrypt, passphrase, progressCallback) {
     function range(start, end) {
         return exports.fromUnicode(emojicrypt.slice(start, end).join(''));
     }
-    mac = range(1, 1+4);
-    salt = range(5, 5+header.s);
-    ciphertext = range(5+header.s);
+    mac         = range(1, 1 + 4);
+    salt        = range(5, 5 + header.s);
+    ciphertext  = range(5 + header.s);
     
     
     // validate the MAC
-    return sha256(
-        exports.fromUnicode(symbols.slice(5).join(''))
-    ).then(function(calculatedMac) { // -> Array Buffer
+    return sha256(range(5)).then(function(calculatedMac) { // -> Array Buffer
         
         calculatedMac = calculatedMac.slice(0, protocol[1].macLen);
         calculatedMac = new Uint8Array(calculatedMac);
