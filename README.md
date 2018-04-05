@@ -47,6 +47,7 @@ patch -o js/pfrazee-base-emoji.js base-emoji/index.js base-emoji.patch
 
 - Standalone "fat" HTML file
 - emojicrypt.com
+- emoji512 format
 - Low, Medium, High, and Ultra security settings (SCrypt N param)
     - Low takes ~0.05s–0.2s in many browsers, Ultra takes ~2-6s.
     - Outside of the browser SCrypt runs much faster, so choose strong passphrases!
