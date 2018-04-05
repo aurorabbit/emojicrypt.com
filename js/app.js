@@ -67,16 +67,16 @@ function decodeParams(emojicrypt) {
     var params, version, header;
     
     if (typeof(emojicrypt) !== "string")
-        return error("Invalid emojicrypt");
+        throw new Error("Invalid emojicrypt.");
     // https://github.com/pfrazee/base-emoji/blob/76ed2427/index.js#L55-L75
     emojicrypt = getSymbols(emojicrypt);
     
     header = emoji256.chars.indexOf(emojicrypt[0]);
-    if (header == -1) return error("Emoji not found.");
+    if (header == -1) throw new Error("Emoji not found.");
     
     version = header >> 5;
     
-    if (!protocol[version]) return error("Cannot parse this data");
+    if (!protocol[version]) throw new Error("Cannot parse this data");
     
     try {
         params = protocol[version].decodeHeader(header);
