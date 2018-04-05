@@ -3,14 +3,14 @@ var protocol = {
         // v1 protocol
         
         // 1 byte       header & scrypt params (encodeHeader, decodeHeader)
-        // 4 bytes      MAC
+        // 4 bytes      HMAC
         // 4 or 6 bytes salt
         // remaining    ciphertext
         
         // constants
         p: 1,
         dkLen: 32, // 256 div 8 = 32
-        macLen: 4, // 4 emoji, 32 bits
+        hmacLen: 4, // 4 emoji, 32 bits
         
         // 1 header emoji
         // 4 or 6 salt emojis
@@ -125,7 +125,7 @@ function decodeHeader(emojicrypt) {
 
 
 function decrypt(emojicrypt, passphrase, progressCallback) {
-    var header, mac, salt, ciphertext;
+    var header, hmac, salt, ciphertext;
     
     if (emojicrypt.length < 0) throw new Error("Empty emojicrypt.");
     if (passphrase.length < 0) throw new Error("Empty passphrase.");
@@ -140,28 +140,34 @@ function decrypt(emojicrypt, passphrase, progressCallback) {
     function range(start, end) {
         return exports.fromUnicode(emojicrypt.slice(start, end).join(''));
     }
-    mac         = range(1, 1 + 4);
+    hmac        = range(1, 1 + 4);
     salt        = range(5, 5 + header.s);
     ciphertext  = range(5 + header.s);
     
     
-    // validate the MAC
-    return sha256(range(5)).then(function(calculatedMac) { // -> Array Buffer
+    // Calculate scrypt hash
+    return protocol[1].scrypt(
+        passphrase, salt, header.N, header.r, progressCallback
+    ).then(function(scryptHash) {
         
-        calculatedMac = calculatedMac.slice(0, protocol[1].macLen);
-        calculatedMac = new Uint8Array(calculatedMac);
-        
-        if (!calculatedMac.every(function(byte, index) {
-            return byte == mac[index];
-        })) throw new Error("Invalid Message Authentication Code (MAC).");
-        
-        
-        // Calculate scrypt hash
-        return protocol[1].scrypt(
-            passphrase, salt, header.N, header.r, progressCallback
+        // concat hash+salt+cipher
+        var buf = new Uint8Array(
+            scryptHash.length + salt.length + ciphertext.length
         );
+        buf.set(new Uint8Array(scryptHash), 0);
+        buf.set(new Uint8Array(salt), scryptHash.length);
+        buf.set(new Uint8Array(ciphertext), salt.length);
         
-    }).then(function(scryptHash) {
+        // verify HMAC
+        sha256(buf).then(function(calculatedHmac) {
+            
+            calculatedHmac = new Uint8Array(calculatedHmac);
+            
+            if (!hmac.every(function(byte, index) {
+                return byte == calculatedHmac[index];
+            })) throw new Error("Invalid Message Authentication Code (HMAC).");
+            
+        });
         
         // import the hash as a key
         return importKey("AES-GCM", scryptHash, ["decrypt"]);
@@ -210,39 +216,44 @@ function encrypt(N, r, s, data, passphrase, progressCallback) {
     ).then(function(scryptHash) {
         
         // import the hash as a key
-        return importKey("AES-GCM", scryptHash, ["encrypt"]);
-        
-    }).then(function(key) {
-        
-        // encrypt with AES-GCM
-        return encryptGCM(salt, key, data); // -> ArrayBuffer
-        
-    }).then(function(ciphertext) {
-        
-        // ArrayBuffer -> Uint8
-        ciphertext = new Uint8Array(ciphertext);
-        
-        // concat salt+ciphertext Uint8 buffers
-        var buf = new Uint8Array(salt.length + ciphertext.length);
-        buf.set(new Uint8Array(salt), 0);
-        buf.set(new Uint8Array(ciphertext), salt.length);
-        
-        // generate a MAC with it
-        //  this is Encrypt-then-MAC
-        //  https://crypto.stackexchange.com/a/205
-        return sha256(buf).then(function(mac) { // -> ArrayBuffer
+        return importKey(
+            "AES-GCM", scryptHash, ["encrypt"]
+        ).then(function(key) {
             
-            mac = mac.slice(0, protocol[1].macLen);
-            mac = new Uint8Array(mac);
+            // encrypt with AES-GCM
+            return encryptGCM(salt, key, data); // -> ArrayBuffer
             
-            return Promise.resolve(
-                emoji256.chars[header] +
-                exports.toUnicode(mac) +
-                exports.toUnicode(salt) +
-                exports.toUnicode(ciphertext)
+        }).then(function(ciphertext) {
+            
+            // ArrayBuffer -> Uint8
+            ciphertext = new Uint8Array(ciphertext);
+            
+            // concat hash+salt+cipher
+            var buf = new Uint8Array(
+                scryptHash.length + salt.length + ciphertext.length
             );
+            buf.set(new Uint8Array(scryptHash), 0);
+            buf.set(new Uint8Array(salt), scryptHash.length);
+            buf.set(new Uint8Array(ciphertext), salt.length);
             
+            // generate an HMAC with it
+            //  this is Encrypt-then-MAC
+            //  https://crypto.stackexchange.com/a/205
+            return sha256(buf).then(function(hmac) { // -> ArrayBuffer
+                
+                hmac = hmac.slice(0, protocol[1].hmacLen);
+                hmac = new Uint8Array(hmac);
+                
+                return Promise.resolve(
+                    emoji256.chars[header] +
+                    exports.toUnicode(hmac) +
+                    exports.toUnicode(salt) +
+                    exports.toUnicode(ciphertext)
+                );
+                
+            });
         });
+        
     });
 }
 
