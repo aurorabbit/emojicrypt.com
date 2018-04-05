@@ -1,0 +1,18 @@
+1d0
+< var emojis = require('./emojis.json')
+23c22
+<     return emojis[c].char
+---
+>     return emojis.chars[c]
+29c28
+<     return ':'+emojis[c].name+':'
+---
+>     return ':'+emojis.names[c]+':'
+35c34
+<     return fn(c, emojis[c])
+---
+>     return fn(c)
+44c43
+<       if (emojis[i].char == symbol) {
+---
+>       if (emojis.chars[i] == symbol) {
