@@ -20,7 +20,7 @@ Some documentation on the elements on the page and what they should do.
 The "Decrypt" button attached to ``#decrypt-pw``
 - attempts to decrypt the emojicrypt in ``#decrypt-in`` using ``#decrypt-pw``
 - progress is displayed with ``#decrypt-progress``
-- the decrypt cancels if they change the password or emojicrypt
+- the decrypt cancels if there is a change to ``#decrypt-in`` or ``#decrypt-pw``
 - can be triggered using the enter key in ``#decrypt-in`` or ``#decrypt-pw``
 - a successful decrypt:
     - outputs to ``#decrypt-output span``
@@ -37,12 +37,13 @@ The "X" button in the top right corner of ``#decrypt-output``
 ##### ``#encrypt``
 
 The "Encrypt" button attached to ``#encrypt-pw``
-- will encrypt the message in ``#encrypt-in`` to ``#encrypt-out`` using ``#encrypt-pw`` and ``#cost``
+- will encrypt the message in ``#encrypt-in`` using ``#encrypt-pw`` and ``#cost``
 - progress is displayed with ``#encrypt-progress``
-- the encrypt cancels if they change the password or message
+- the encrypt cancels if there is a change to ``#encrypt-in`` or ``#encrypt-pw``
 - can be triggered using the enter key in ``#encrypt-in`` or ``#encrypt-pw``
-- a successful encrypt outputs to ``#encrypt-out``, which is always displayed
-- a successful encrypt also removes the ``disabled`` property from ``#copy``
+- a successful encrypt:
+    - outputs to ``#encrypt-out``, which is always displayed
+    - removes the ``disabled`` property from ``#copy``
 
 
 ##### ``#copy``
