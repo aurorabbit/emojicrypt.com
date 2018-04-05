@@ -116,7 +116,7 @@ function decode(string) {
     try {
         params = protocol[version].decodeHeader(header);
     } catch(e) {
-        error(e.message);
+        return error(e.message);
     }
     
     return params; // demo for now
