@@ -123,7 +123,7 @@ function decodeParams(emojicrypt) {
 
 
 
-function encrypt(N, r, s, data, passphrase, pcb) {
+function encrypt(N, r, s, data, passphrase, progressCallback) {
     var header, salt, p, dkLen;
     
     if (data.length < 0) throw new Error("Invalid data.");
@@ -149,7 +149,7 @@ function encrypt(N, r, s, data, passphrase, pcb) {
     // all aboard the promise chain
     return protocol[1].scrypt(
         
-        passphrase, salt, N, r, pcb
+        passphrase, salt, N, r, progressCallback
         
     ).then(function(scryptHash) {
         
