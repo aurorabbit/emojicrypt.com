@@ -89,6 +89,67 @@ function decodeParams(emojicrypt) {
 
 
 
+function encrypt(N, r, s, data, passphrase, cb, pcb) {
+    var header, salt, p, dkLen;
+    
+    if (data.length < 0) throw new Error("Invalid data.");
+    if (passphrase.length < 0) throw new Error("Invalid password.");
+    
+    if (typeof(N) != "number") throw new Error("N must be a number.");
+    if (typeof(r) != "number") throw new Error("r must be a number.");
+    if (typeof(s) != "number") throw new Error("s must be a number.");
+    
+    if (N < 10  ||  N > 17) throw new Error("Invalid v1 N parameter.");
+    if (r != 8  &&  r != 12) throw new Error("Invalid v1 r parameter.");
+    if (s != 4  &&  s != 6) throw new Error("Invalid v1 s parameter.");
+    
+    passphrase = new buffer.Buffer(passphrase.normalize("NFKC"));
+    
+    // may throw an error
+    header = protocol[1].encodeHeader(N, r==12, s==6);
+    
+    salt = generateSalt(s);
+    
+    // expand N
+    N = Math.pow(2, N);
+    // get constants
+    p = protocol[1].p;
+    dkLen = protocol[1].dkLen;
+    
+    scrypt(passphrase, salt, N, r, p, dkLen, function(err, progress, hash) {
+        if (err) throw new Error(err);
+        if (!hash) return (typeof(pcb) == "function" ? pcb(progress) : null);
+        
+        hash = new Uint8Array(hash);
+        
+        // hash is finished, import it as a key
+        window.crypto.subtle.importKey(
+            "raw", hash, { name: "AES-GCM" }, false, ["encrypt"]
+        ).then(function(key) {
+            
+            return window.crypto.subtle.encrypt(
+                
+                { name: "AES-GCM", iv: salt },
+                key, new buffer.Buffer(data.normalize('NFKC'))
+                
+            ).then(function(ciphertext) {
+                
+                header = emoji256.chars[header];
+                ciphertext = exports.toUnicode(ciphertext);
+                salt = exports.toUnicode(salt);
+                
+                cb(header + salt + ciphertext);
+                
+            });
+            
+        });
+        
+    });
+    
+}
+
+
+
 function generateSalt(length) {
     if (length < 0) throw new Error("Invalid salt length");
     
