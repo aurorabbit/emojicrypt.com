@@ -63,14 +63,15 @@ function error(e) { return e; }
 
 
 
-function decode(string) {
+function decodeParams(emojicrypt) {
     var params, version, header;
     
-    if (typeof(string) !== "string") return error("Invalid string.");
+    if (typeof(emojicrypt) !== "string")
+        return error("Invalid emojicrypt");
     // https://github.com/pfrazee/base-emoji/blob/76ed2427/index.js#L55-L75
-    string = getSymbols(string);
+    emojicrypt = getSymbols(emojicrypt);
     
-    header = emoji256.chars.indexOf(string[0]);
+    header = emoji256.chars.indexOf(emojicrypt[0]);
     if (header == -1) return error("Emoji not found.");
     
     version = header >> 5;
