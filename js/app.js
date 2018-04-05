@@ -65,6 +65,32 @@ var protocol = {
             // pack the values into a number
             return version << 5 | N << 2 | r << 1 | s;
         },
+        
+        // takes passphrase, salt, N, r, and an optional callback
+        scrypt: function(passphrase, salt, N, r, progress) {
+            var p, len;
+            
+            p = protocol[1].p;
+            len = protocol[1].dkLen;
+            
+            // expand N
+            N = Math.pow(2, N);
+            
+            // fill in progress callback
+            if (typeof(progress) != 'function') progress = function() {};
+            
+            // return a Promise
+            return new Promise(function(resolve, reject) {
+                
+                scrypt(passphrase, salt, N, r, p, len, function(err, p, hash) {
+                    if (err) return reject(err);
+                    if (!hash) return progress(p);
+                    
+                    resolve(new Uint8Array(hash));
+                });
+                
+            });
+        },
     },
 };
 
@@ -97,7 +123,7 @@ function decodeParams(emojicrypt) {
 
 
 
-function encrypt(N, r, s, data, passphrase, cb, pcb) {
+function encrypt(N, r, s, data, passphrase, pcb) {
     var header, salt, p, dkLen;
     
     if (data.length < 0) throw new Error("Invalid data.");
@@ -111,49 +137,57 @@ function encrypt(N, r, s, data, passphrase, cb, pcb) {
     if (r != 8  &&  r != 12) throw new Error("Invalid v1 r parameter.");
     if (s != 4  &&  s != 6) throw new Error("Invalid v1 s parameter.");
     
+    data = new buffer.Buffer(data.normalize("NFKC"));
     passphrase = new buffer.Buffer(passphrase.normalize("NFKC"));
     
     // may throw an error
     header = protocol[1].encodeHeader(N, r==12, s==6);
     
-    salt = generateSalt(s);
+    salt = generateSalt(s); // -> Uint8
     
-    // expand N
-    N = Math.pow(2, N);
-    // get constants
-    p = protocol[1].p;
-    dkLen = protocol[1].dkLen;
     
-    scrypt(passphrase, salt, N, r, p, dkLen, function(err, progress, hash) {
-        if (err) throw new Error(err);
-        if (!hash) return (typeof(pcb) == "function" ? pcb(progress) : null);
+    // all aboard the promise chain
+    return protocol[1].scrypt(
         
-        hash = new Uint8Array(hash);
+        passphrase, salt, N, r, pcb
         
-        // hash is finished, import it as a key
-        window.crypto.subtle.importKey(
-            "raw", hash, { name: "AES-GCM" }, false, ["encrypt"]
-        ).then(function(key) {
+    ).then(function(scryptHash) {
+        
+        // import the hash as a key
+        return importKey("AES-GCM", scryptHash, ["encrypt"]);
+        
+    }).then(function(key) {
+        
+        // encrypt with AES-GCM
+        return encryptGCM(salt, key, data); // -> ArrayBuffer
+        
+    }).then(function(ciphertext) {
+        
+        // ArrayBuffer -> Uint8
+        ciphertext = new Uint8Array(ciphertext);
+        
+        // concat ciphertext+salt Uint8 buffers
+        var buf = new Uint8Array(ciphertext.length + salt.length);
+        buf.set(new Uint8Array(ciphertext), 0);
+        buf.set(new Uint8Array(salt), ciphertext.length);
+        
+        // generate a MAC with it
+        //  this is Encrypt-then-MAC
+        //  https://crypto.stackexchange.com/a/205
+        return sha256(buf).then(function(mac) { // -> ArrayBuffer
             
-            return window.crypto.subtle.encrypt(
-                
-                { name: "AES-GCM", iv: salt },
-                key, new buffer.Buffer(data.normalize('NFKC'))
-                
-            ).then(function(ciphertext) {
-                
-                header = emoji256.chars[header];
-                ciphertext = exports.toUnicode(ciphertext);
-                salt = exports.toUnicode(salt);
-                
-                cb(header + salt + ciphertext);
-                
-            });
+            mac = mac.slice(0, protocol[1].macLen);
+            mac = new Uint8Array(mac);
+            
+            return Promise.resolve(
+                emoji256.chars[header] +
+                exports.toUnicode(mac) +
+                exports.toUnicode(salt) +
+                exports.toUnicode(ciphertext)
+            );
             
         });
-        
     });
-    
 }
 
 
@@ -162,4 +196,30 @@ function generateSalt(length) {
     if (length < 0) throw new Error("Invalid salt length");
     
     return window.crypto.getRandomValues(new Uint8Array(length));
+}
+
+
+
+function importKey(algo, key, uses, exportable) {
+    if (typeof(uses) == "undefined") uses = ["encrypt", "decrypt"];
+    if (typeof(exportable) == "undefined") exportable = false;
+    
+    return window.crypto.subtle.importKey(
+        "raw", key, { name: algo }, exportable, uses
+    );
+}
+
+
+
+function encryptGCM(salt, key, data) {
+    return window.crypto.subtle.encrypt(
+        { name: "AES-GCM", iv: salt },
+        key, data
+    );
+}
+
+
+
+function sha256(data) {
+    return window.crypto.subtle.digest({ name: "SHA-256" }, data);
 }
