@@ -124,6 +124,46 @@ function decodeHeader(emojicrypt) {
 
 
 
+function decrypt(emojicrypt, passphrase, progressCallback) {
+    var symbols, header, mac, salt, ciphertext;
+    
+    if (emojicrypt.length < 0) throw new Error("Empty emojicrypt.");
+    if (passphrase.length < 0) throw new Error("Empty passphrase.");
+    
+    symbols = getSymbols(emojicrypt);
+    
+    // may throw an error
+    header = decodeHeader(symbols);
+    
+    
+    // Helper function for slicing the message
+    function range(start, end) {
+        return exports.fromUnicode(symbols.slice(start, end).join(''));
+    }
+    mac = range(1, 1+4);
+    salt = range(5, 5+header.s);
+    ciphertext = range(5+header.s);
+    
+    
+    // validate the MAC
+    return sha256(
+        exports.fromUnicode(symbols.slice(5).join(''))
+    ).then(function(calculatedMac) { // -> Array Buffer
+        
+        calculatedMac = calculatedMac.slice(0, protocol[1].macLen);
+        calculatedMac = new Uint8Array(calculatedMac);
+        
+        if (!calculatedMac.every(function(byte, index) {
+            return byte == mac[index];
+        })) throw new Error("Invalid Message Authentication Code (MAC).");
+        
+        // 
+        return 
+    });
+}
+
+
+
 function encrypt(N, r, s, data, passphrase, progressCallback) {
     var header, salt, p, dkLen;
     
