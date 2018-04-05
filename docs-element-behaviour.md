@@ -22,7 +22,16 @@ The "Decrypt" button attached to ``#decrypt-pw``
 - progress is displayed with ``#decrypt-progress``
 - the decrypt cancels if they change the password or emojicrypt
 - can be triggered using the enter key in ``#decrypt-in`` or ``#decrypt-pw``
-- a successful decrypt sets the ``location.hash`` to ``show`` to unhide ``#decrypt-out``
+- a successful decrypt:
+    - outputs to ``#decrypt-output``
+    - unhides ``#decrypt-output``
+
+
+##### ``#decrypt-close``
+
+The "X" button in the top right corner of ``#decrypt-output``
+- empties ``#decrypt-output``
+- hides ``#decrypt-output``
 
 
 ##### ``#encrypt``
