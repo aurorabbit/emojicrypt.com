@@ -54,6 +54,9 @@ var protocol = {
             // pack the values into a number
             return version << 5 | N << 2 | r << 1 | s;
         },
+        // v1 constants
+        p: 1,
+        dkLen: 32,
     },
 };
 
