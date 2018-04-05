@@ -36,6 +36,8 @@
     #cost div { display: inline-block; padding-left: 1.2rem; }
     #cost div { margin-left: 0.5rem; white-space: nowrap; }
     #cost .custom-control-label { font-weight: 400; }
+    
+    #decrypt-output { margin-top: 1rem; display: none; }
 </style>
 
 
@@ -92,6 +94,13 @@
         <div class=progress>
           <div id=decrypt-progresss class='progress-bar progress-bar-striped' role=progressbar></div>
         </div>
+        
+        <!-- Output -->
+        <div id=decrypt-output class='alert alert-dismissible alert-primary'>
+          <button id=decrypt-close type=button class=close>&#xd7;</button>
+          <span></span>
+        </div>
+        
       </div>
       
       
@@ -139,6 +148,15 @@
             <label class=custom-control-label for=U>Ultra</label>
           </div>
         </div>
+        
+        <!-- Output -->
+        <div class=input-group>
+          <input id=encrypt-output class=form-control disabled type=text>
+          <div class=input-group-append>
+            <button class='btn btn-success' disabled type=button>Copy</button>
+          </div>
+        </div>
+        
       </div>
       
       
