@@ -206,9 +206,7 @@ function encrypt(N, r, s, data, passphrase, progressCallback) {
     
     // all aboard the promise chain
     return protocol[1].scrypt(
-        
         passphrase, salt, N, r, progressCallback
-        
     ).then(function(scryptHash) {
         
         // import the hash as a key
