@@ -39,14 +39,10 @@ exports.fromUnicode = function (s) {
   s = getSymbols(s)
   var buf = new Uint8Array(s.length)
   s.forEach(function (symbol, index) {
-    for (var i=0; i < emojis.length; i++) {
-      if (emojis.chars[i] == symbol) {
-        buf.writeUIntBE(i, index, 1)
-        break
-      }
-    }
-    if (i == emojis.length)
+    var byte = emojis.chars.indexOf(symbol);
+    if (byte == -1)
       throw new Error('Failed to match symbol: ' + symbol + ' (' + symbol.charCodeAt(0) + ' ' + symbol.charCodeAt(1) + ')')
+    buf[index] = byte;
   })
   return buf
 }

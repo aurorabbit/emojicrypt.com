@@ -31,7 +31,16 @@
 <   var buf = new Buffer(s.length)
 ---
 >   var buf = new Uint8Array(s.length)
-44c43
+43,49c42,43
+<     for (var i=0; i < emojis.length; i++) {
 <       if (emojis[i].char == symbol) {
+<         buf.writeUIntBE(i, index, 1)
+<         break
+<       }
+<     }
+<     if (i == emojis.length)
 ---
->       if (emojis.chars[i] == symbol) {
+>     var byte = emojis.chars.indexOf(symbol);
+>     if (byte == -1)
+50a45
+>     buf[index] = byte;
