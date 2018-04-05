@@ -155,8 +155,27 @@ function decrypt(emojicrypt, passphrase, progressCallback) {
             return byte == mac[index];
         })) throw new Error("Invalid Message Authentication Code (MAC).");
         
-        // 
-        return 
+        
+        // Calculate scrypt hash
+        return protocol[1].scrypt(
+            passphrase, salt, header.N, header.r, progressCallback
+        );
+        
+    }).then(function(scryptHash) {
+        
+        // import the hash as a key
+        return importKey("AES-GCM", scryptHash, ["decrypt"]);
+        
+    }).then(function(key) {
+        
+        // decrypt with AES-GCM
+        return decryptGCM(salt, key, ciphertext); // -> ArrayBuffer
+        
+    }).then(function(plaintext) {
+        
+        plaintext = new Uint8Array(plaintext);
+        return Promise.resolve(new TextDecoder().decode(plaintext));
+        
     });
 }
 
@@ -245,6 +264,15 @@ function importKey(algo, key, uses, exportable) {
     
     return window.crypto.subtle.importKey(
         "raw", key, { name: algo }, exportable, uses
+    );
+}
+
+
+
+function decryptGCM(salt, key, ciphertext) {
+    return window.crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: salt },
+        key, ciphertext
     );
 }
 
