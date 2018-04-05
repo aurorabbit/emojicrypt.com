@@ -1,0 +1,6 @@
+[submodule "base-emoji"]
+	path = base-emoji
+	url = https://github.com/pfrazee/base-emoji
+[submodule "scrypt-js"]
+	path = scrypt-js
+	url = https://github.com/ricmoo/scrypt-js
