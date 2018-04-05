@@ -62,33 +62,53 @@
       </div>
     </div>
     
-    <!-- encryption and decryption -->
+    
+    
     <div class=row>
+      
+      
+      
+      <!-- Decryption -->
       <div class='col-lg-6 form'>
+        
+        <!-- Input -->
         <div class=form-group>
           <label for=decrypt-in><h4>Unlock emojicrypt</h4></label>
           <textarea class=form-control id=decrypt-in rows=5
             placeholder="&#x1f512; Paste emojicrypt here..."></textarea>
         </div>
+        
+        <!-- Password -->
         <div class=input-group>
           <input class=form-control type=text placeholder="&#x1f513; Enter the password">
           <div class=input-group-append>
             <button class='btn btn-primary' type=button>Decrypt</button>
           </div>
         </div>
+        
       </div>
+      
+      
+      
+      <!-- Encryption -->
       <div class='col-lg-6 form'>
+        
+        <!-- Input -->
         <div class=form-group>
           <label for=decrypt-in><h4>Create emojicrypt</h4></label>
           <textarea class=form-control id=decrypt-in rows=5
             placeholder="&#x1f513; Write your message..."></textarea>
         </div>
+        
+        <!-- Password -->
         <div class=input-group>
           <input class=form-control type=text placeholder="&#x1f512; Enter a password">
           <div class=input-group-append>
             <button class='btn btn-primary' type=button>Encrypt</button>
           </div>
         </div>
+        
+        <!-- Cost -->
         <div class=form-group id=cost>
           <label for=cost>Cost:</label>
           <div class='custom-control custom-radio'>
@@ -109,6 +129,9 @@
           </div>
         </div>
       </div>
+      
+      
+      
     </div>
   </div>
 </body>
