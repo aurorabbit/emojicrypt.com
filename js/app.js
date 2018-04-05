@@ -166,10 +166,10 @@ function encrypt(N, r, s, data, passphrase, progressCallback) {
         // ArrayBuffer -> Uint8
         ciphertext = new Uint8Array(ciphertext);
         
-        // concat ciphertext+salt Uint8 buffers
-        var buf = new Uint8Array(ciphertext.length + salt.length);
-        buf.set(new Uint8Array(ciphertext), 0);
-        buf.set(new Uint8Array(salt), ciphertext.length);
+        // concat salt+ciphertext Uint8 buffers
+        var buf = new Uint8Array(salt.length + ciphertext.length);
+        buf.set(new Uint8Array(salt), 0);
+        buf.set(new Uint8Array(ciphertext), salt.length);
         
         // generate a MAC with it
         //  this is Encrypt-then-MAC
