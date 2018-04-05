@@ -131,6 +131,7 @@ function decrypt(emojicrypt, passphrase, progressCallback) {
     if (passphrase.length < 0) throw new Error("Empty passphrase.");
     
     emojicrypt = getSymbols(emojicrypt);
+    passphrase = buffer.Buffer(passphrase.normalize("NFKC"));
     
     // may throw an error
     header = decodeHeader(emojicrypt);
