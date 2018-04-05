@@ -80,16 +80,17 @@ NOTE: this function's return values will likely be changing with new protocol ve
 
 
 
-##### ``generateEmojiSalt(length)``
+##### ``generateSalt(length)``
 
-Outputs a string of emojis as a salt
+Returns a buffer with ``length`` random bytes
 
 ```js
 typeof(length) == 'number'
 length > 0
 
-salt = generateEmojiSalt(length)
+salt = generateSalt(length)
 
-typeof(salt) == 'string'
-salt.length == length*2 // emoji are 2-wide in js
+salt instanceof Uint8Array()
+ArrayBuffer.isView(salt)
+salt.length == length
 ```

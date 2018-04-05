@@ -87,13 +87,8 @@ function decodeParams(emojicrypt) {
 
 
 
-function generateEmojiSalt(length) {
+function generateSalt(length) {
     if (length < 0) throw new Error("Invalid salt length");
     
-    // 1 emoji256 = 1 byte
-    return exports.toUnicode(
-        window.crypto.getRandomValues(
-            new Uint8Array(length)
-        )
-    );
+    return window.crypto.getRandomValues(new Uint8Array(length));
 }
