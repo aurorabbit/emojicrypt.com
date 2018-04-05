@@ -18,12 +18,12 @@ Some documentation on the elements on the page and what they should do.
 ###### ``#decrypt``
 
 The "Decrypt" button attached to ``#decrypt-pw``
-- attempts to decrypt the emojicrypt in ``#decrypt-in`` to ``#decrypt-out`` using ``#decrypt-pw``
+- attempts to decrypt the emojicrypt in ``#decrypt-in`` using ``#decrypt-pw``
 - progress is displayed with ``#decrypt-progress``
 - the decrypt cancels if they change the password or emojicrypt
 - can be triggered using the enter key in ``#decrypt-in`` or ``#decrypt-pw``
 - a successful decrypt:
-    - outputs to ``#decrypt-output``
+    - outputs to ``#decrypt-output span``
     - unhides ``#decrypt-output``
 
 
