@@ -3,7 +3,7 @@ function toBuffer(v) {
   if (!ArrayBuffer.isView(v))
     throw new Error('Invalid ArrayBuffer');
   if (!v instanceof Uint8Array)
-    throw new Error('ArrayBuffer must be a Uint8Array');
+    return Uint8Array(v);
   return v
 }
 
