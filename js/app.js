@@ -56,7 +56,7 @@ var protocol = {
         },
         // v1 constants
         p: 1,
-        dkLen: 32,
+        dkLen: 32, // 256 div 8 = 32
     },
 };
 
