@@ -81,9 +81,8 @@ function decodeParams(emojicrypt) {
     
     if (!protocol[version]) throw new Error("Cannot parse this data");
     
-    try {
-        params = protocol[version].decodeHeader(header);
-    } catch(e) { throw e; } // rethrow
+    // may throw an error
+    params = protocol[version].decodeHeader(header);
     
     return params;
 }
