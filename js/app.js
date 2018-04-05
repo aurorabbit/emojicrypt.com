@@ -100,8 +100,8 @@ function error(e) { return e; }
 
 
 
-function decodeParams(emojicrypt) {
-    var params, version, header;
+function decodeHeader(emojicrypt) {
+    var header, version, params;
     
     if (typeof(emojicrypt) !== "string")
         throw new Error("Invalid emojicrypt.");
