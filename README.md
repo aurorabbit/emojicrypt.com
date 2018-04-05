@@ -1,13 +1,30 @@
-EmojiCrypt
+# emojicrypt
+
+Encrypt messages using SCrypt and AES-GCM, output in emoji!
+
+Made for twitter and the fediverse.
 
 
-Encrypt messages using SCrypt, AES, and Emoji!
 
-https://github.com/ricmoo/scrypt-js
-https://github.com/pfrazee/base-emoji
+## Thanks to
+
+[ricmoo/scrypt.js](https://github.com/ricmoo/scrypt-js) [demo](http://ricmoo.github.io/scrypt-js/)
+
+[pfrazee/base-emoji](https://github.com/pfrazee/base-emoji) base256 with Emoji
+
+WebCrypto
+
+
+## Project state
+
+So far only the v1 protocol header encoding and decoding is done.
+
+Expect updates in the next 24 hours~
 
 
 ## Compiling yourself
+
+This repository tries to modify third party code as little as possible, and will provide ways for you to generate it yourself.
 
 ```sh
 # NOTE: the --recursive is important
@@ -25,3 +42,12 @@ node gen-emoji256.js
 patch -o js/pfrazee-base-emoji.js base-emoji/index.js base-emoji.patch
 ```
 
+
+## Planned
+
+- Standalone "fat" HTML file
+- emojicrypt.com
+- Low, Medium, High, and Ultra security settings (SCrypt N param)
+    - Low takes ~0.05s–0.2s in many browsers, Ultra takes ~2-6s.
+    - Outside of the browser SCrypt runs much faster, so choose strong passphrases!
+    - It may make sense to use PBKDF2 with WebCrypt in the next protocol.
