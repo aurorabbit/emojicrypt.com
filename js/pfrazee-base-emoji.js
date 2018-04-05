@@ -1,17 +1,17 @@
 
 function toBuffer(v) {
-  if (!Buffer.isBuffer(v))
-    return new Buffer(v, 'hex')
+  if (!ArrayBuffer.isView(v))
+    throw new Error('Invalid ArrayBuffer');
+  if (!v instanceof Uint8Array)
+    throw new Error('ArrayBuffer must be a Uint8Array');
   return v
 }
 
 function convert(buf, fn) {
   buf = toBuffer(buf)
   var out = ''
-  var n =0;
   for (var i = 0; i < buf.length; i++) {
-    out += fn(buf.readUInt8(i))
-    n++
+    out += fn(buf[i])
   }
   return out
 }
@@ -37,7 +37,7 @@ exports.toCustom = function(buf, fn) {
 
 exports.fromUnicode = function (s) {
   s = getSymbols(s)
-  var buf = new Buffer(s.length)
+  var buf = new Uint8Array(s.length)
   s.forEach(function (symbol, index) {
     for (var i=0; i < emojis.length; i++) {
       if (emojis.chars[i] == symbol) {

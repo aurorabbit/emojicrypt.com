@@ -1,5 +1,20 @@
 1d0
 < var emojis = require('./emojis.json')
+4,5c3,6
+<   if (!Buffer.isBuffer(v))
+<     return new Buffer(v, 'hex')
+---
+>   if (!ArrayBuffer.isView(v))
+>     throw new Error('Invalid ArrayBuffer');
+>   if (!v instanceof Uint8Array)
+>     throw new Error('ArrayBuffer must be a Uint8Array');
+12d12
+<   var n =0;
+14,15c14
+<     out += fn(buf.readUInt8(i))
+<     n++
+---
+>     out += fn(buf[i])
 23c22
 <     return emojis[c].char
 ---
@@ -12,6 +27,10 @@
 <     return fn(c, emojis[c])
 ---
 >     return fn(c)
+41c40
+<   var buf = new Buffer(s.length)
+---
+>   var buf = new Uint8Array(s.length)
 44c43
 <       if (emojis[i].char == symbol) {
 ---
