@@ -74,7 +74,7 @@ var protocol = {
             len = protocol[1].dkLen;
             
             // expand N
-            N = Math.pow(2, N);
+            N = (1 << N);
             
             // fill in progress callback
             if (typeof(progress) != 'function') progress = function() {};
