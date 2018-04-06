@@ -37,7 +37,7 @@
     #cost div { margin-left: 0.5rem; white-space: nowrap; }
     #cost .custom-control-label { font-weight: 400; }
     
-    #decrypt-output { margin-top: 1rem; display: none; }
+    #decrypt-out { margin-top: 1rem; display: none; }
 </style>
 
 
@@ -86,7 +86,7 @@
         <div class=input-group>
           <input id=decrypt-pw class=form-control type=text placeholder="&#x1f510; Enter or guess the password" autocomplete=off autocorrect=off autocapitalize=off spellcheck=false>
           <div class=input-group-append>
-            <button class='btn btn-primary' type=button>Decrypt</button>
+            <button id=decrypt class='btn btn-primary' type=button>Decrypt</button>
           </div>
         </div>
         
@@ -96,7 +96,7 @@
         </div>
         
         <!-- Output -->
-        <div id=decrypt-output class='alert alert-dismissible alert-primary'>
+        <div id=decrypt-out class='alert alert-dismissible alert-primary'>
           <button id=decrypt-close type=button class=close>&#xd7;</button>
           <span></span>
         </div>
@@ -157,9 +157,9 @@
           <div class=input-group-prepend>
             <span class="input-group-text">&#x1f512;</span>
           </div>
-          <input id=encrypt-output class=form-control disabled type=text>
+          <input id=encrypt-out class=form-control disabled type=text>
           <div class=input-group-append>
-            <button class='btn btn-success' disabled type=button>Copy</button>
+            <button id=copy class='btn btn-success' disabled type=button>Copy</button>
           </div>
         </div>
         
