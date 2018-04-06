@@ -92,7 +92,7 @@
         
         <!-- Progress bar -->
         <div class=progress>
-          <div id=decrypt-progresss class='progress-bar progress-bar-striped' role=progressbar></div>
+          <div id=decrypt-progress class='progress-bar progress-bar-striped' role=progressbar></div>
         </div>
         
         <!-- Output -->
@@ -110,22 +110,25 @@
         
         <!-- Input -->
         <div class=form-group>
-          <label for=decrypt-in><h4>Create emojicrypt</h4></label>
-          <textarea class=form-control id=decrypt-in rows=5
+          <label for=encrypt-in><h4>Create emojicrypt</h4></label>
+          <textarea class=form-control id=encrypt-in rows=5
             placeholder="&#x1f513; Write your message..."></textarea>
         </div>
         
         <!-- Password -->
         <div class=input-group>
           <input id=encrypt-pw class=form-control type=text placeholder="&#x1f510; Enter a password" autocomplete=off autocorrect=off autocapitalize=off spellcheck=false>
+          
+          <!-- Encrypt button -->
           <div class=input-group-append>
-            <button class='btn btn-primary' type=button>Encrypt</button>
+            <button id=encrypt class='btn btn-primary' type=button>Encrypt</button>
           </div>
+          
         </div>
         
         <!-- Progress bar -->
         <div class=progress>
-          <div id=encrypt-progresss class='progress-bar progress-bar-striped' role=progressbar></div>
+          <div id=encrypt-progress class='progress-bar progress-bar-striped' role=progressbar></div>
         </div>
         
         <!-- Cost -->
