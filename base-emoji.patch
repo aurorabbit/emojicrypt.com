@@ -1,6 +1,8 @@
-1d0
+1c1
 < var emojis = require('./emojis.json')
-4,5c3,8
+---
+> var baseEmoji = {};
+4,5c4,9
 <   if (!Buffer.isBuffer(v))
 <     return new Buffer(v, 'hex')
 ---
@@ -10,30 +12,48 @@
 >     throw new Error('Invalid ArrayBuffer');
 >   if (!v instanceof Uint8Array)
 >     throw new Error('Buffer must be Uint8Array'); //?
-12d14
+12d15
 <   var n =0;
-14,15c16
+14,15c17
 <     out += fn(buf.readUInt8(i))
 <     n++
 ---
 >     out += fn(buf[i])
-23c24
+20,21c22,23
+< exports.toUnicode =
+< exports.toUtf8 = function(buf) { // toUtf8 is legacy, it's inaccurate - JS is utf16
+---
+> baseEmoji.toUnicode =
+> baseEmoji.toUtf8 = function(buf) { // toUtf8 is legacy, it's inaccurate - JS is utf16
+23c25
 <     return emojis[c].char
 ---
->     return emojis.chars[c]
-29c30
+>     return emoji256.chars[c]
+27c29
+< exports.toNames = function(buf) {
+---
+> baseEmoji.toNames = function(buf) {
+29c31
 <     return ':'+emojis[c].name+':'
 ---
->     return ':'+emojis.names[c]+':'
-35c36
+>     return ':'+emoji256.names[c]+':'
+33c35
+< exports.toCustom = function(buf, fn) {
+---
+> baseEmoji.toCustom = function(buf, fn) {
+35c37
 <     return fn(c, emojis[c])
 ---
 >     return fn(c)
-41c42
+39c41
+< exports.fromUnicode = function (s) {
+---
+> baseEmoji.fromUnicode = function (s) {
+41c43
 <   var buf = new Buffer(s.length)
 ---
 >   var buf = new Uint8Array(s.length)
-43,49c44,45
+43,49c45,46
 <     for (var i=0; i < emojis.length; i++) {
 <       if (emojis[i].char == symbol) {
 <         buf.writeUIntBE(i, index, 1)
@@ -42,7 +62,7 @@
 <     }
 <     if (i == emojis.length)
 ---
->     var byte = emojis.chars.indexOf(symbol);
+>     var byte = emoji256.chars.indexOf(symbol);
 >     if (byte == -1)
-50a47
+50a48
 >     buf[index] = byte;

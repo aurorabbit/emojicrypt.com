@@ -1,3 +1,4 @@
+var baseEmoji = {};
 
 function toBuffer(v) {
   if (v instanceof ArrayBuffer)
@@ -18,30 +19,30 @@ function convert(buf, fn) {
   return out
 }
 
-exports.toUnicode =
-exports.toUtf8 = function(buf) { // toUtf8 is legacy, it's inaccurate - JS is utf16
+baseEmoji.toUnicode =
+baseEmoji.toUtf8 = function(buf) { // toUtf8 is legacy, it's inaccurate - JS is utf16
   return convert(buf, function(c) {
-    return emojis.chars[c]
+    return emoji256.chars[c]
   })
 }
 
-exports.toNames = function(buf) {
+baseEmoji.toNames = function(buf) {
   return convert(buf, function(c) {
-    return ':'+emojis.names[c]+':'
+    return ':'+emoji256.names[c]+':'
   })
 }
 
-exports.toCustom = function(buf, fn) {
+baseEmoji.toCustom = function(buf, fn) {
   return convert(buf, function(c) {
     return fn(c)
   })
 }
 
-exports.fromUnicode = function (s) {
+baseEmoji.fromUnicode = function (s) {
   s = getSymbols(s)
   var buf = new Uint8Array(s.length)
   s.forEach(function (symbol, index) {
-    var byte = emojis.chars.indexOf(symbol);
+    var byte = emoji256.chars.indexOf(symbol);
     if (byte == -1)
       throw new Error('Failed to match symbol: ' + symbol + ' (' + symbol.charCodeAt(0) + ' ' + symbol.charCodeAt(1) + ')')
     buf[index] = byte;
