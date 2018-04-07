@@ -82,7 +82,7 @@ function doDecrypt() {
     decDom.outSpan.innerHTML = '';
     
    
-    decrypt(
+    libemojicrypt.decrypt(
         emojicrypt, pw, decDom.progress.cb()
     ).then(function(message) {
         state.isDecrypting = false;
@@ -100,7 +100,7 @@ function doDecrypt() {
 }
 
 function doEncrypt() {
-    var N, r, s, message, pw;
+    var N, r, s, message, pw, params;
     
     if (state.isEncrypting) {
         // TODO: cancel scrypt
@@ -117,6 +117,14 @@ function doEncrypt() {
     r = cost.r;
     s = message.length > 490? 4 : 6;
     
+    params = libemojicrypt.generateParams({
+        N: N,
+        r: r,
+        s: s,
+        ascii: /^[\x20-\xFF]*$/.test(message),
+        lowerpw: true,
+    });
+    
     state.isEncrypting = true;
     encDom.button.disabled = true;
     encDom.progress.start();
@@ -126,8 +134,8 @@ function doEncrypt() {
     
     try {
         
-        encrypt(
-            N, r, s, message, pw, encDom.progress.cb()
+        libemojicrypt.encrypt(
+            message, pw, params, encDom.progress.cb()
         ).then(function(message) {
             state.isEncrypting = false;
             encDom.button.disabled = false;

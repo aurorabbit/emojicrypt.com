@@ -4,3 +4,6 @@
 [submodule "scrypt-js"]
 	path = scrypt-js
 	url = https://github.com/ricmoo/scrypt-js
+[submodule "libemojicrypt"]
+	path = libemojicrypt
+	url = https://github.com/aurorabbit/libemojicrypt
