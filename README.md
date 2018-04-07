@@ -28,7 +28,7 @@ This repository tries to modify third party code as little as possible, and will
 
 ```sh
 # NOTE: the --recursive is important
-git clone --recursive https://github.com/aurorabbit/emojicrypt.git
+git clone --recursive https://github.com/aurorabbit/emojicrypt.com.git
 cd emojicrypt
 
 # checkout specific git commits
