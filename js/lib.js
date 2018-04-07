@@ -96,10 +96,6 @@ var protocol = {
 
 
 
-function error(e) { return e; }
-
-
-
 function decodeHeader(emojicrypt) {
     var header, version, params;
     
