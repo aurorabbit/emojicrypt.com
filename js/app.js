@@ -81,7 +81,9 @@ function doDecrypt() {
     decDom.out.style.display = 'none';
     decDom.outSpan.innerHTML = '';
     
-   
+    
+    try {
+    
     decrypt(
         emojicrypt, pw, decDom.progress.cb()
     ).then(function(message) {
@@ -97,6 +99,13 @@ function doDecrypt() {
         decDom.button.disabled = false;
         decDom.progress.fail();
     });
+    
+    } catch(e) {
+        console.error(e);
+        state.isDecrypting = false;
+        decDom.button.disabled = false;
+        decDom.progress.fail();
+    }
 }
 
 function doEncrypt() {
