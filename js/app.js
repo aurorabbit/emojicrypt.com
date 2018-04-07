@@ -70,6 +70,9 @@ function doDecrypt() {
         return;
     }
     
+    decDom.out.style.display = 'none';
+    decDom.outSpan.innerHTML = '';
+    
     emojicrypt = decDom.in.value;
     pw = decDom.pw.value.toLowerCase();
     
@@ -78,9 +81,6 @@ function doDecrypt() {
     state.isDecrypting = true;
     decDom.button.disabled = true;
     decDom.progress.start();
-    decDom.out.style.display = 'none';
-    decDom.outSpan.innerHTML = '';
-    
    
     libemojicrypt.decrypt(
         emojicrypt, pw, decDom.progress.cb()
@@ -107,6 +107,9 @@ function doEncrypt() {
         return;
     }
     
+    encDom.out.value = '';
+    encDom.copy.disabled = true;
+    
     message = encDom.in.value;
     pw = encDom.pw.value.toLowerCase();
     
@@ -128,9 +131,6 @@ function doEncrypt() {
     state.isEncrypting = true;
     encDom.button.disabled = true;
     encDom.progress.start();
-    
-    encDom.out.value = '';
-    encDom.copy.disabled = true;
     
     libemojicrypt.encrypt(
         message, pw, params, encDom.progress.cb()
