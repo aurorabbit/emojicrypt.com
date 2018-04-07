@@ -132,25 +132,21 @@ function doEncrypt() {
     encDom.out.value = '';
     encDom.copy.disabled = true;
     
-    try {
+    libemojicrypt.encrypt(
+        message, pw, params, encDom.progress.cb()
+    ).then(function(message) {
+        state.isEncrypting = false;
+        encDom.button.disabled = false;
+        encDom.progress.success();
         
-        libemojicrypt.encrypt(
-            message, pw, params, encDom.progress.cb()
-        ).then(function(message) {
-            state.isEncrypting = false;
-            encDom.button.disabled = false;
-            encDom.progress.success();
-            
-            encDom.out.value = message;
-            encDom.copy.disabled = false;
-        });
-        
-    } catch(e) {
-        console.error(e);
+        encDom.out.value = message;
+        encDom.copy.disabled = false;
+    }).catch(function(error) {
+        console.error(error);
         state.isEncrypting = false;
         encDom.button.disabled = false;
         encDom.progress.fail();
-    }
+    });
 }
 
 
