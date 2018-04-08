@@ -141,6 +141,9 @@ function doEncrypt() {
         
         encDom.out.value = message;
         encDom.copy.disabled = false;
+        
+        encDom.out.focus();
+        encDom.out.select();
     }).catch(function(error) {
         console.error(error);
         state.isEncrypting = false;
@@ -157,6 +160,32 @@ decDom.pw.addEventListener('keyup', function(evt) {
 });
 encDom.pw.addEventListener('keyup', function(evt) {
     if (evt.keyCode == 13) doEncrypt();
+});
+
+
+encDom.copy.addEventListener('click', function(evt) {
+    encDom.out.readonly = false;
+    var range = document.createRange();
+    range.selectNodeContents(encDom.out);
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    encDom.out.setSelectionRange(0, encDom.out.value.length);
+    encDom.out.readonly = true;
+    if (document.execCommand('copy')) {
+        encDom.copy.disabled = true;
+        encDom.copy.innerText = "Copied";
+        encDom.copy.className = 'btn btn-outline-success';
+    } else {
+        encDom.copy.disabled = true;
+        encDom.copy.innerText = "Failed";
+        encDom.copy.className = 'btn btn-outline-danger';
+    }
+    window.setTimeout(function() {
+        encDom.copy.disabled = false;
+        encDom.copy.innerText = "Copy";
+        encDom.copy.className = 'btn btn-outline-primary';
+    }, 1200);
 });
 
 // progress bar functions
