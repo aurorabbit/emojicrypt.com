@@ -76,7 +76,7 @@ function doDecrypt() {
     emojicrypt = decDom.in.value;
     pw = decDom.pw.value.toLowerCase();
     
-    if (emojicrypt.length < 2) return;
+    if (emojicrypt.length == 0) return;
     
     state.isDecrypting = true;
     decDom.button.disabled = true;
