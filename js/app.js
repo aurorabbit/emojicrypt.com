@@ -89,6 +89,9 @@ function doDecrypt() {
         decDom.button.disabled = false;
         decDom.progress.success();
         
+        decDom.pw.value = '';
+        decDom.pw.blur();
+        
         decDom.outSpan.innerHTML = message;
         decDom.out.style.display = 'block';
     }).catch(function(e) {
