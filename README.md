@@ -1,6 +1,6 @@
 # emojicrypt
 
-Encrypt messages using SCrypt and AES-GCM, output in emoji!
+Encrypt messages using scrypt and AES-GCM, output in emoji!
 
 Made for twitter and the fediverse.
 
@@ -17,9 +17,13 @@ Made for twitter and the fediverse.
 
 ## Project state
 
-So far only the v1 protocol header encoding and decoding is done.
+Project is in working condition.
 
-Expect updates in the next 24 hours~
+There are still a few things to add, and docs need updating.
+
+The v1 protocol is likely finalized: the 2 byte header defines scrypt N and r parameters, salt and HMAC lengths, ascii-only encoding, and lower-case-only passwords.
+
+Documentation is needed for that.
 
 
 ## Compiling yourself
@@ -45,10 +49,5 @@ patch -o js/pfrazee-base-emoji.js base-emoji/index.js base-emoji.patch
 
 ## Planned
 
-- Standalone "fat" HTML file
-- emojicrypt.com
-- emoji512 format
-- Low, Medium, High, and Ultra security settings (SCrypt N param)
-    - Low takes ~0.05s–0.2s in many browsers, Ultra takes ~2-6s.
-    - Outside of the browser SCrypt runs much faster, so choose strong passphrases!
-    - It may make sense to use PBKDF2 with WebCrypt in the next protocol.
+This is written on a piece of paper, I may port it soon or just complete it.
+
