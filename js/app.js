@@ -154,15 +154,15 @@ function doEncrypt() {
 
 
 decDom.button.addEventListener('click', doDecrypt);
-decDom.in.addEventListener('keyup', function(evt) {
-    if (evt.keyCode == 13) doDecrypt();
+decDom.in.addEventListener('keypress', function(evt) {
+    if (evt.keyCode == 13) { doDecrypt(); evt.preventDefault(); }
 });
-decDom.pw.addEventListener('keyup', function(evt) {
-    if (evt.keyCode == 13) doDecrypt();
+decDom.pw.addEventListener('keypress', function(evt) {
+    if (evt.keyCode == 13) { doDecrypt(); evt.preventDefault(); }
 });
 encDom.button.addEventListener('click', doEncrypt);
-encDom.pw.addEventListener('keyup', function(evt) {
-    if (evt.keyCode == 13) doEncrypt();
+encDom.pw.addEventListener('keypress', function(evt) {
+    if (evt.keyCode == 13) { doEncrypt(); evt.preventDefault(); }
 });
 /* Add this after finishing cancel functionality
 encDom.costRadio.forEach(function(radio) {
